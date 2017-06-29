@@ -27,12 +27,14 @@ class Archive < Thor
   desc 'org-repos ORGANIZATION', "Archive an organization's repos"
   def org_repos(organization)
     puts "Backing up repositories for #{organization}..."
+    client = GithubArchive::Auth.new(options[:token]).client
     gh = GithubArchive::Organization::Repos.new
     gh.archive(
       organization,
       options[:path],
-      options[:token]
+      client
     )
+    p gh.backup_count
   end
 end
 
