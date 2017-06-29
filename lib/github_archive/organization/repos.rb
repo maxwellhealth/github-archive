@@ -2,6 +2,8 @@ module GithubArchive
   class Organization
     # archive github repos for an organization
     class Repos
+      attr_accessor :backup_count
+      # archive an organizations repos
       def archive(org, path, token)
         token ||= ENV['GITHUB_TOKEN']
         require 'octokit'
@@ -24,18 +26,9 @@ module GithubArchive
         # exit if we found no repos
         return unless repos.count > 0
 
-        # create backup directory
-        Dir.mkdir path
-
-        backup_count = 0
-        repos.each do |repo|
-          puts "Archiving #{repo[:full_name]}"
-          # p "#{path}/#{repo[:name]}.tgz"
-          # IO.copy_stream(open(client.archive_link(repo[:full_name])), "#{time}/#{repo[:name]}.tgz")
-          # p client.archive_link(repo[:full_name])
-          backup_count += 1
-        end
-        backup_count
+        o = GithubArchive::ArchiveRepos.new
+        o.archive(client, repos, path)
+        self.backup_count = o.backup_count
       end
     end
   end
