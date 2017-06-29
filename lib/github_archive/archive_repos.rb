@@ -9,10 +9,18 @@ module GithubArchive
     end
 
     def archive(client, repos, prefix, verbose)
+      require 'tmpdir'
       fullpath = path(prefix)
-      repos.each do |repo|
-        copy_repo(repo, fullpath, client, verbose)
-        self.backup_count += 1
+      Dir.mktmpdir('GHA') do |dir|
+        repos.each do |repo|
+          copy_repo(repo, dir, client, verbose)
+          self.backup_count += 1
+        end
+
+        # p "#{fullpath}.tgz"
+        # File.open("#{fullpath}.tgz", 'w') do |f|
+        #   f.puts(GithubArchive::Util::Tar.tar(dir))
+        # end
       end
     end
 
@@ -28,17 +36,16 @@ module GithubArchive
 
     def copy_repo(repo, path, client, verbose)
       require 'open-uri'
-
-      puts "Archiving #{repo[:full_name]}\n" if verbose
-      # IO.copy_stream(
-      #   open(client.archive_link(repo[:full_name])),
-      #   "#{path}/#{repo[:name]}.tgz"
-      # )
-      puts client.archive_link(repo[:full_name]) if verbose
-      puts "#{path}/#{repo[:name]}.tgz" if verbose
-    end
-
-    def bundle_archives(path)
+      if verbose
+        puts "Archiving #{repo[:full_name]}\n"
+        puts client.archive_link(repo[:full_name])
+        puts "#{path}/#{repo[:name]}.tgz"
+      end
+      File.open(File.join(path, "#{repo[:name]}.tgz"), 'w') do |f|
+        open(client.archive_link(repo[:full_name]), 'rb') do |r|
+          f.write r.read
+        end
+      end
     end
   end
 end
