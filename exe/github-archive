@@ -12,6 +12,10 @@ class Archive < Thor
     true
   end
 
+  class_option :path,
+               default: './',
+               desc: 'Path to write backups'
+
   Signal.trap('INT') do
     puts "\nInterrupted.\n"
     exit 1
