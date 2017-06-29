@@ -21,10 +21,11 @@ class Archive < Thor
     exit 1
   end unless binding.respond_to? :pry
 
-  desc 'org ORGANIZATION', "Archive an organization's repos"
-  def org(organization)
-    puts organization
-    GithubArchive::Organization.new.archive(organization)
+  desc 'org-repos ORGANIZATION', "Archive an organization's repos"
+  def org_repos(organization)
+    puts "Backing up repositories for #{organization}..."
+    gh = GithubArchive::Organization::Repos.new
+    gh.archive(organization, options[:path])
   end
 end
 
