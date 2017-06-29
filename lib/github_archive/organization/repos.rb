@@ -2,7 +2,7 @@ module GithubArchive
   class Organization
     # archive github repos for an organization
     class Repos
-      attr_accessor :backup_count, :output
+      attr_accessor :backup_count, :total_size
       # archive an organizations repos
       def archive(org, path, client, verbose)
         # get a collection of organization repos

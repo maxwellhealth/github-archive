@@ -45,6 +45,7 @@ class Archive < Thor
       options[:verbose]
     )
     puts "Total repos backed up: #{gh.backup_count}"
+    puts "Total size: #{gh.total_size}"
   end
 end
 
