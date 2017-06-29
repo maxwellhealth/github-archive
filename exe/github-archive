@@ -6,6 +6,7 @@ require 'bundler/setup'
 require 'github_archive'
 require 'thor'
 
+# CLI tool for archiving github
 class Archive < Thor
   # exit(1) of failure
   def self.exit_on_faiure?
@@ -14,10 +15,18 @@ class Archive < Thor
 
   class_option :path,
                default: './',
-               desc: 'Path to write backups'
+               desc: 'Path to write backups',
+               aliases: ['-p']
 
   class_option :token,
-               desc: 'github token for authentication'
+               desc: 'github token for authentication',
+               aliases: ['-t']
+
+  class_option :verbose,
+               type: :boolean,
+               default: false,
+               desc: 'Use verbose output',
+               aliases: ['-v']
 
   Signal.trap('INT') do
     puts "\nInterrupted.\n"
@@ -32,9 +41,10 @@ class Archive < Thor
     gh.archive(
       organization,
       options[:path],
-      client
+      client,
+      options[:verbose]
     )
-    p gh.backup_count
+    puts "Total repos backed up: #{gh.backup_count}"
   end
 end
 
