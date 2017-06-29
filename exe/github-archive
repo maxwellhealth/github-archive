@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+
+require 'bundler/setup'
+require 'github_archive'
+require 'thor'
+
+class Archive < Thor
+  # exit(1) of failure
+  def self.exit_on_faiure?
+    true
+  end
+
+  Signal.trap('INT') do
+    puts "\nInterrupted.\n"
+    exit 1
+  end unless binding.respond_to? :pry
+
+  desc 'org ORGANIZATION', "Archive an organization's repos"
+  def org(organization)
+    puts organization
+    GithubArchive::Organization.new.archive(organization)
+  end
+end
+
+Archive.start(ARGV)
