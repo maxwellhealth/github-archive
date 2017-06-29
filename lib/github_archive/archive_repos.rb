@@ -1,10 +1,11 @@
 module GithubArchive
   # archive a set of repos
   class ArchiveRepos
-    attr_accessor :backup_count, :total_size
+    attr_accessor :backup_count, :path, :total_size
 
     def initialize
       self.backup_count = 0
+      self.path = ''
       self.total_size = 0
     end
 
@@ -17,10 +18,9 @@ module GithubArchive
           self.backup_count += 1
         end
 
-        p "Writing #{fullpath}.tar"
         tb = GithubArchive::Util::Tar.new
         tb.tar(dir, "#{fullpath}.tar")
-        p tb.path
+        self.path = tb.path
         self.total_size = tb.total_size
       end
     end

@@ -46,6 +46,7 @@ class Archive < Thor
     )
     puts "Total repos backed up: #{gh.backup_count}"
     puts "Total size: #{gh.total_size}"
+    puts "Output file: #{gh.path}"
   end
 end
 

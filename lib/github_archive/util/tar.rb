@@ -6,6 +6,11 @@ module GithubArchive
 
       attr_accessor :path, :total_size
 
+      def initialize
+        path = ''
+        total_size = 0
+      end
+
       def tar(source, target)
         File.open(target, 'wb') do |tarfile|
           relative_regexp = %r{^#{Regexp.escape(source)}\/?}
@@ -24,8 +29,8 @@ module GithubArchive
             end
           end
           self.path = tarfile.path
-          self.total_size = tarfile.size
         end
+        self.total_size = File.open(target).size
       end
     end
   end
