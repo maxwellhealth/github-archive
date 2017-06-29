@@ -1,8 +1,9 @@
 # GithubArchive
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/github_archive`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a command line tool for archiving github content.
 
-TODO: Delete this and the text above, and describe your gem
+It currently supports archiving the master branch of an organizations repos
+in the current state, without history.
 
 ## Installation
 
