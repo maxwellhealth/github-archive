@@ -22,7 +22,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+Commands:
+  github-archive help [COMMAND]          # Describe available commands or one specific command
+  github-archive org-repos ORGANIZATION  # Archive an organization's repos
+
+Options:
+  -p, [--path=PATH]                # Path to write backups
+                                   # Default: ./
+  -t, [--token=TOKEN]              # github token for authentication
+  -v, [--verbose], [--no-verbose]  # Use verbose output
+```
 
 ## Development
 
