@@ -1,17 +1,18 @@
 module GithubArchive
   class Organization
+    # archive github repos for an organization
     class Repos
-      def archive(org, path)
-        # require 'dogapi'
+      def archive(org, path, token)
+        token ||= ENV['GITHUB_TOKEN']
         require 'octokit'
         require 'open-uri'
 
-        # get the current time
-        time = Time.now.utc.strftime '%Y%m%d.%H%M%S'
-        path.concat time
+        # use current time for path
+        path.concat Time.now.utc.strftime '%Y%m%d.%H%M%S'
 
         # create a new github client
-        client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
+        client = Octokit::Client.new(access_token: token)
+        # client = GithubArchive::Auth.new(token)
 
         # create a new datadog client
         # dog = Dogapi.Client.new(ENV['DOGAPI'])
