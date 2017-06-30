@@ -4,11 +4,12 @@ module GithubArchive
     class Tar
       require 'rubygems/package'
 
-      attr_accessor :path, :total_size
+      attr_accessor :path
+      attr_reader :size
 
       def initialize
-        path = ''
-        total_size = 0
+        @path = ''
+        @size = 0
       end
 
       def tar(source, target)
@@ -16,7 +17,7 @@ module GithubArchive
           relative_regexp = %r{^#{Regexp.escape(source)}\/?}
           Gem::Package::TarWriter.new(tarfile) do |tar|
             Dir[File.join(source, '**/*')].each do |file|
-              stat = File.lstat file
+              stat = File.lstat(file)
               relative_file = file.sub(relative_regexp, '')
               next unless stat.ftype == 'file'
               tar.add_file relative_file, stat.mode do |tf|
@@ -28,9 +29,8 @@ module GithubArchive
               end
             end
           end
-          self.path = tarfile.path
+          @size = tarfile.size
         end
-        self.total_size = File.open(target).size
       end
     end
   end
