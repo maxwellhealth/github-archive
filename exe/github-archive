@@ -4,6 +4,7 @@ ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
 
 require 'bundler/setup'
 require 'github_archive'
+require 'pathname'
 require 'thor'
 
 # CLI tool for archiving github
@@ -13,10 +14,10 @@ class Archive < Thor
     true
   end
 
-  class_option :path,
-               default: './',
-               desc: 'Path to write backups',
-               aliases: ['-p']
+  class_option :filename,
+               default: 'github-archive.tar',
+               desc: 'output filename',
+               aliases: ['-f']
 
   class_option :token,
                desc: 'github token for authentication',
@@ -36,17 +37,38 @@ class Archive < Thor
   desc 'org-repos ORGANIZATION', "Archive an organization's repos"
   def org_repos(organization)
     puts "Backing up repositories for #{organization}..."
-    client = GithubArchive::Auth.new(options[:token]).client
-    gh = GithubArchive::Organization::Repos.new
-    gh.archive(
-      organization,
-      options[:path],
-      client,
+    gh = GithubArchive::User::Repos.new(
+      GithubArchive::Auth.new(options[:token]).client,
+      check_file(options[:filename]),
       options[:verbose]
     )
+    gh.archive(organization)
     puts "Total repos backed up: #{gh.backup_count}"
     puts "Total size: #{gh.total_size}"
-    puts "Output file: #{gh.path}"
+  end
+
+  desc 'user-repos USER', "Archive a user's repos"
+  def user_repos(user)
+    puts "Backing up repositories for #{user}..."
+    gh = GithubArchive::User::Repos.new(
+      GithubArchive::Auth.new(options[:token]).client,
+      check_file(options[:filename]),
+      options[:verbose]
+    )
+    gh.archive(user)
+    puts "Total repos backed up: #{gh.backup_count}"
+    puts "Total size: #{gh.total_size}"
+  end
+
+  no_tasks do
+    def check_file(outfile)
+      file = Pathname.new(outfile)
+      if file.exist?
+        puts "\nERROR: #{file.realpath} exists"
+        exit 1
+      end
+      outfile
+    end
   end
 end
 
