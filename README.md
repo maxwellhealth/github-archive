@@ -21,16 +21,18 @@ Or install it yourself as:
 
     $ gem install github_archive
 
-## Usage
+## CLI Usage
 
 ```
+$ ./exe/github-archive
 Commands:
   github-archive help [COMMAND]          # Describe available commands or one specific command
   github-archive org-repos ORGANIZATION  # Archive an organization's repos
+  github-archive user-repos USER         # Archive a user's repos
 
 Options:
-  -p, [--path=PATH]                # Path to write backups
-                                   # Default: ./
+  -f, [--filename=FILENAME]        # output filename
+                                   # Default: ./github-archive.tar
   -t, [--token=TOKEN]              # github token for authentication
   -v, [--verbose], [--no-verbose]  # Use verbose output
 ```

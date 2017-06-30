@@ -15,7 +15,7 @@ class Archive < Thor
   end
 
   class_option :filename,
-               default: 'github-archive.tar',
+               default: './github-archive.tar',
                desc: 'output filename',
                aliases: ['-f']
 
