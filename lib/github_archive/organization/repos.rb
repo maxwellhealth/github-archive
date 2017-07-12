@@ -28,7 +28,7 @@ module GithubArchive
       end
 
       def all_repos(org)
-        repos = client.repositories user, per_page: 100
+        repos = client.organization_repositories org, per_page: 100
         if repos.count >= 100
           repos.concat client.last_response.rels[:next].get.data
         end
