@@ -8,7 +8,7 @@ require 'pathname'
 require 'thor'
 
 # CLI tool for archiving github
-class Archive < Thor
+class Cli < Thor
   # exit(1) of failure
   def self.exit_on_faiure?
     true
@@ -22,6 +22,12 @@ class Archive < Thor
   class_option :token,
                desc: 'github token for authentication',
                aliases: ['-t']
+
+  class_option :dry_run,
+               type: :boolean,
+               default: false,
+               desc: "Don't create archive, assumes verbose",
+               aliases: ['-n']
 
   class_option :verbose,
                type: :boolean,
@@ -40,6 +46,7 @@ class Archive < Thor
     gh = GithubArchive::Organization::Repos.new(
       GithubArchive::Auth.new(options[:token]).client,
       check_file(options[:filename]),
+      options[:dry_run],
       options[:verbose]
     )
     gh.archive(organization)
@@ -53,6 +60,7 @@ class Archive < Thor
     gh = GithubArchive::User::Repos.new(
       GithubArchive::Auth.new(options[:token]).client,
       check_file(options[:filename]),
+      options[:dry_run],
       options[:verbose]
     )
     gh.archive(user)
@@ -72,4 +80,4 @@ class Archive < Thor
   end
 end
 
-Archive.start(ARGV)
+Cli.start(ARGV)

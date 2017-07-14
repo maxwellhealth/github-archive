@@ -2,14 +2,15 @@ module GithubArchive
   class Organization
     # archive github repos for an organization
     class Repos
-      attr_accessor :client, :path, :verbose
+      attr_accessor :client, :dry_run, :path, :verbose
       attr_reader :backup_count, :total_size
 
-      def initialize(client, path, verbose)
+      def initialize(client, dry_run, path, verbose)
         @backup_count = 0
         @total_size = 0
         @path = path
         @client = client
+        @dry_run = dry_run
         @verbose = verbose
       end
 
@@ -21,7 +22,7 @@ module GithubArchive
         # exit if we found no repos
         return unless repos.count > 0
 
-        o = GithubArchive::ArchiveRepos.new(client, path, verbose)
+        o = GithubArchive::ArchiveRepos.new(client, dry_run, path, verbose)
         o.archive(repos)
         @backup_count = o.backup_count
         @total_size = o.total_size
