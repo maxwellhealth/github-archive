@@ -1,16 +1,17 @@
 module GithubArchive
   # archive a set of repos
   class ArchiveRepos
-    attr_accessor :client, :dry_run, :path, :verbose
+    attr_accessor :token, :dry_run, :path, :verbose
     attr_reader :backup_count, :total_size
 
-    def initialize(client, dry_run, path, verbose)
+    def initialize(token, path, dry_run, verbose)
       @backup_count = 0
       @total_size = 0
       @path = path
-      @client = client
+      @token = token
       @dry_run = dry_run
       @verbose = verbose
+      @client = false
     end
 
     def archive(repos)
@@ -30,13 +31,14 @@ module GithubArchive
 
     def copy_repo(repo, path)
       require 'open-uri'
-      if verbose or dry_run
+      if verbose || dry_run
         puts "Archiving #{repo[:full_name]}\n"
         puts "#{path}/#{repo[:name]}.tgz"
       end
       return if dry_run
+      @client = GithubArchive::Auth.new(token).client
       File.open(File.join(path, "#{repo[:name]}.tgz"), 'wb') do |f|
-        f.write open(self.client.archive_link(repo[:full_name])).read
+        f.write open(@client.archive_link(repo[:full_name])).read
       end
     end
   end
