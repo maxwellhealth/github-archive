@@ -15,7 +15,6 @@ class Cli < Thor
   end
 
   class_option :filename,
-               default: './github-archive.tar',
                desc: 'output filename',
                aliases: ['-f']
 
@@ -42,10 +41,11 @@ class Cli < Thor
 
   desc 'org-repos ORGANIZATION', "Archive an organization's repos"
   def org_repos(organization)
+    path = file_name(options[:filename], organization)
     puts "Backing up repositories for #{organization}..."
     gh = GithubArchive::Organization::Repos.new(
-      GithubArchive::Auth.new(options[:token]).client,
-      check_file(options[:filename]),
+      options[:token],
+      path,
       options[:dry_run],
       options[:verbose]
     )
@@ -56,10 +56,11 @@ class Cli < Thor
 
   desc 'user-repos USER', "Archive a user's repos"
   def user_repos(user)
+    path = file_name(user)
     puts "Backing up repositories for #{user}..."
     gh = GithubArchive::User::Repos.new(
-      GithubArchive::Auth.new(options[:token]).client,
-      check_file(options[:filename]),
+      options[:token],
+      path,
       options[:dry_run],
       options[:verbose]
     )
@@ -69,6 +70,14 @@ class Cli < Thor
   end
 
   no_tasks do
+    def file_name(file, resource)
+      if file
+        check_file(file)
+      else
+        check_file("#{resource}.tar")
+      end
+    end
+
     def check_file(outfile)
       file = Pathname.new(outfile)
       if file.exist?
