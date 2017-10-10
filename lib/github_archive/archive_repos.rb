@@ -37,8 +37,12 @@ module GithubArchive
       end
       return if dry_run
       @client = GithubArchive::Auth.new(token).client
-      File.open(File.join(path, "#{repo[:name]}.tgz"), 'wb') do |f|
-        f.write open(@client.archive_link(repo[:full_name])).read
+      begin
+        File.open(File.join(path, "#{repo[:name]}.tgz"), 'wb') do |f|
+          f.write open(@client.archive_link(repo[:full_name])).read
+        end
+      rescue OpenURI::HTTPError
+        puts $!.message
       end
     end
   end
