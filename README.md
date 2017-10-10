@@ -2,8 +2,9 @@
 
 This is a command line tool for archiving github content.
 
-It currently supports archiving the master branch of an organizations repos
-in the current state, without history.
+It currently supports archiving the master branch of a user or organization's
+repositories, as they currently are without git history. This tool was created
+to quickly create an archive of all of our code for software escrow purposes.
 
 ## Installation
 
@@ -45,7 +46,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/github_archive. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/maxwellhealth/github_archive. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
