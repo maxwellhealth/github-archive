@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'Archive github'
   spec.description = 'Download a tarball of the master branch of all repos in' \
                      ' a github orgainization'
-  spec.homepage    = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage    = "https://github.com/maxwellhealth/github-archive/"
   spec.license     = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -32,9 +32,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.15'
+  spec.add_development_dependency 'bundler', '>= 2.2.10'
   spec.add_development_dependency 'pry', '~> 0.10.x'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '~> 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.0'
 
   spec.add_dependency 'octokit', '~> 4.x'
